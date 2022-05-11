@@ -1,0 +1,19 @@
+{
+  "name": "curso-practico-api-rest",
+  "version": "1.0.0",
+  "description": "Curso práctico de consumo de API REST con JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricandres98/curso-practico-api-rest.git"
+  },
+  "author": "@ricandres98",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ricandres98/curso-practico-api-rest/issues"
+  },
+  "homepage": "https://github.com/ricandres98/curso-practico-api-rest#readme"
+}
