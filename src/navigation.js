@@ -26,7 +26,7 @@ function navigator() {
         homePage();
     }
 
-    location.hash
+    HTMLContainer.scrolltop = 0;
 }
 
 function homePage() {

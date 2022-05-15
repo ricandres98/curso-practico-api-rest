@@ -1,3 +1,6 @@
+//HTML Element
+const HTMLContainer = document.querySelector('html'); 
+
 //Sections
 const headerSection = document.querySelector('#header');
 const trendingPreviewSection = document.querySelector('#trendingPreview');
