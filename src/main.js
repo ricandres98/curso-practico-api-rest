@@ -123,4 +123,13 @@ async function getMovieById(id) {
     
     console.log(`${IMAGE_URL_500}${movie.poster_path}`)
     printCategories(movie.genres, movieDetailCategoriesList);
+    getRelatedMoviesById(id);
+}
+
+async function getRelatedMoviesById(id) {
+    const { data } = await api(`/movie/${id}/similar`);
+    const relatedMovies = data.results;
+
+    printMovieCards(relatedMovies, relatedMoviesContainer);
+    relatedMoviesContainer.scrollTo(0, 0);
 }
