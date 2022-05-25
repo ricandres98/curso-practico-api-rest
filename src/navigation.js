@@ -1,6 +1,19 @@
+// document.addEventListener('DOMContentLoaded', ()=>{
+    document.querySelector('form').addEventListener('submit', (event)=> {
+        console.log(event)
+        event.preventDefault();
+    }, false);
+// })
 searchFormBtn.addEventListener('click', () => {
     const input = searchFormInput.value.trim();
     location.hash = `#search=${searchFormInput.value.trim()}`;
+});
+searchFormInput.addEventListener('keyup', (event) => {
+    console.log(event);
+    if(event.key === 'Enter'){
+        const input = searchFormInput.value.trim();
+        location.hash = `#search=${searchFormInput.value.trim()}`;
+    }
 });
 trendingBtn.addEventListener('click', () => {
     location.hash = '#trends';
@@ -84,6 +97,7 @@ function searchPage() {
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
+
 
     // ['#search', 'valor']
     let [ , query]= location.hash.split('=');
