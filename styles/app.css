@@ -104,7 +104,10 @@ button {
 .movie-container {
   cursor: pointer;
   background-color: var(--purple-light-2);
-
+  border-radius: 8px;
+  width: 150px;
+  height: 225px;
+  margin-bottom: 15px;
 }
 
 .movie-container--loading {
@@ -134,6 +137,14 @@ button {
   justify-content: space-between;
   position: relative;
   flex-wrap: wrap;
+}
+
+.loading {
+    display: inline-block;
+    width: 100%;
+    min-height: 20px;
+    background-color: var(--purple-light-2);
+    animation: loading-skeleton infinite 1.5s;
 }
 
 
@@ -366,6 +377,9 @@ button {
 .relatedMovies-scrollContainer .movie-container {
   display: inline-block;
   margin-right: 8px;
+  width: 125px;
+  height: 187.5px;
+  margin-bottom: unset;
 }
 
 .relatedMovies-scrollContainer .movie-img {

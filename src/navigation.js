@@ -59,10 +59,19 @@ function homePage() {
     genericListSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
 
+    //Loading skeletons
+    buildMovieCardSkeletons({
+        container: trendingMoviesPreviewList,
+        numOfSkeletons: 3});
+
+    buildCategorySkeletons({
+        container: categoriesPreviewList,
+        numOfSkeletons: 4});
     
     getTrendingMoviesPreview();
     getCategoriesPreview();
 }
+
 function trendsPage() {
     console.log('Trends');
 
@@ -79,9 +88,15 @@ function trendsPage() {
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
-    headerCategoryTitle.innerHTML = 'Tendencias'
+    headerCategoryTitle.innerHTML = 'Tendencias';
+
+    buildMovieCardSkeletons({
+        container: genericListSection,
+        numOfSkeletons: 4});
+
     getTrendingMovies();
 }
+
 function searchPage() {
     console.log('Search!!');
 
@@ -101,8 +116,14 @@ function searchPage() {
 
     // ['#search', 'valor']
     let [ , query]= location.hash.split('=');
+
+    buildMovieCardSkeletons({
+        container: genericListSection,
+        numOfSkeletons: 4});
+
     getMoviesBySearch(query);
 }
+
 function categoryPage() {
     console.log('categories!!');
 
@@ -128,8 +149,13 @@ function categoryPage() {
 
     headerCategoryTitle.innerText = categoryName;
 
+    buildMovieCardSkeletons({
+        container: genericListSection,
+        numOfSkeletons: 4});
+
     getMoviesByCategories(id);
 }
+
 function movieDetailsPage() {
     console.log('Movie!!');
 
@@ -148,6 +174,12 @@ function movieDetailsPage() {
 
     // ['#search', 'valor']
     let [ , movieId]= location.hash.split('=');
+
+    buildMovieCardSkeletons({container: relatedMoviesContainer, numOfSkeletons: 4});
+
+    buildCategorySkeletons({container: movieDetailCategoriesList, numOfSkeletons: 4});
+    
+    buildMovieDetailSkeletons();
 
     getMovieById(movieId);
 }

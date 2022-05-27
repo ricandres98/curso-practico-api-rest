@@ -121,7 +121,6 @@ async function getMovieById(id) {
     movieDetailDescription.innerHTML = movie.overview;
     movieDetailScore.innerHTML = movie.vote_average;
     
-    console.log(`${IMAGE_URL_500}${movie.poster_path}`)
     printCategories(movie.genres, movieDetailCategoriesList);
     getRelatedMoviesById(id);
 }
@@ -132,4 +131,46 @@ async function getRelatedMoviesById(id) {
 
     printMovieCards(relatedMovies, relatedMoviesContainer);
     relatedMoviesContainer.scrollTo(0, 0);
+}
+
+// Build Loading skeletons
+
+function buildMovieCardSkeletons({container, numOfSkeletons}) {
+    container.innerHTML = "";
+    
+    const fragment = new DocumentFragment();
+
+    for(let i = 0; i < numOfSkeletons; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.classList.add('movie-container');
+        skeleton.classList.add('movie-container--loading');
+
+        fragment.appendChild(skeleton);
+    }
+
+    container.appendChild(fragment);
+}
+
+function buildCategorySkeletons({container, numOfSkeletons}) {
+    container.innerHTML = "";
+
+    const fragment = new DocumentFragment();
+
+    for(let i = 0; i < numOfSkeletons; i++) {
+        const skeleton = document.createElement('div');
+        skeleton.classList.add('category-container');
+        skeleton.classList.add('category-container--loading');
+
+        fragment.appendChild(skeleton);
+    }
+
+    container.appendChild(fragment);
+}
+
+function buildMovieDetailSkeletons(){
+    movieDetailTitle.innerHTML = '<span class="loading"></span>';
+    movieDetailDescription.innerHTML = `<span class="loading"></span>
+    <span class="loading"></span>
+    <span class="loading"></span>`;
+    movieDetailScore.innerHTML = '<span class="loading"></span>';
 }
