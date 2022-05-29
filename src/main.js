@@ -14,7 +14,18 @@ const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
 
 // Utils
 
-function printMovieCards(movies, fatherContainer) {
+const lazyLoader = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+        if(entry.isIntersecting) {
+            console.log(entry)
+            const url = entry.target.getAttribute('data-img');
+            entry.target.setAttribute('src', url);
+        }
+        
+    });
+});
+
+function printMovieCards(movies, fatherContainer, lazyLoad = false) {
     fatherContainer.innerHTML = '';
 
     movies.forEach(movie => {
@@ -28,9 +39,13 @@ function printMovieCards(movies, fatherContainer) {
         movieImg.classList.add('movie-img');
         movieImg.setAttribute('alt', movie.title);
         movieImg.setAttribute(
-            'src',
+            lazyLoad ? 'data-img' : 'src',
             `${IMAGE_URL_300}${movie.poster_path}`
         );
+        
+        if(lazyLoad) {
+            lazyLoader.observe(movieImg);
+        }
         
         
         movieContainer.appendChild(movieImg);
@@ -65,7 +80,7 @@ async function getTrendingMoviesPreview() {
     const movies = data.results;
     console.log(movies)
 
-    printMovieCards(movies, trendingMoviesPreviewList)
+    printMovieCards(movies, trendingMoviesPreviewList, true);
 }
 
 async function getCategoriesPreview() {
@@ -129,7 +144,7 @@ async function getRelatedMoviesById(id) {
     const { data } = await api(`/movie/${id}/similar`);
     const relatedMovies = data.results;
 
-    printMovieCards(relatedMovies, relatedMoviesContainer);
+    printMovieCards(relatedMovies, relatedMoviesContainer, true);
     relatedMoviesContainer.scrollTo(0, 0);
 }
 
