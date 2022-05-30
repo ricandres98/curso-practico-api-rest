@@ -14,7 +14,7 @@ const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
 
 // Utils
 
-const lazyLoader = new IntersectionObserver((entries, observer) => {
+const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if(entry.isIntersecting) {
             console.log(entry)
@@ -42,6 +42,11 @@ function printMovieCards(movies, fatherContainer, lazyLoad = false) {
             lazyLoad ? 'data-img' : 'src',
             `${IMAGE_URL_300}${movie.poster_path}`
         );
+
+        movieImg.addEventListener('error', () => {
+            movieImg.src = `http://placehold.jp/20/5C218A/EEEAF2/150x225.jpg?text=${movie.title}`;
+        })
+
         
         if(lazyLoad) {
             lazyLoader.observe(movieImg);
@@ -101,7 +106,7 @@ async function getMoviesByCategories(id) {
 
     const movies = data.results;
 
-    printMovieCards(movies, genericListSection);
+    printMovieCards(movies, genericListSection, true);
 }
 
 async function getMoviesBySearch(query) {
@@ -114,7 +119,7 @@ async function getMoviesBySearch(query) {
 
     const movies = data.results;
 
-    printMovieCards(movies, genericListSection);
+    printMovieCards(movies, genericListSection, true);
 }
 
 async function getTrendingMovies() {
@@ -123,7 +128,7 @@ async function getTrendingMovies() {
     const movies = data.results;
     console.log(movies)
 
-    printMovieCards(movies, genericListSection);
+    printMovieCards(movies, genericListSection, true);
 }
 
 async function getMovieById(id) {
