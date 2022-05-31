@@ -172,13 +172,13 @@ function movieDetailsPage() {
     genericListSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
 
-    // ['#search', 'valor']
-    let [ , movieId]= location.hash.split('=');
+    // ['#search', valor]
+    let [ , valor]= location.hash.split('=');
+    // [ movieId, movieName ]
+    let [ movieId, ] = valor.split('-');
 
     buildMovieCardSkeletons({container: relatedMoviesContainer, numOfSkeletons: 4});
-
     buildCategorySkeletons({container: movieDetailCategoriesList, numOfSkeletons: 4});
-    
     buildMovieDetailSkeletons();
 
     getMovieById(movieId);
