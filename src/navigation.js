@@ -1,15 +1,14 @@
-// document.addEventListener('DOMContentLoaded', ()=>{
-    document.querySelector('form').addEventListener('submit', (event)=> {
-        console.log(event)
-        event.preventDefault();
-    }, false);
-// })
+//Evitar que al enviar el formulario este modifique la URL con su comportamiento default, 
+// para así tener el control sobre esta.
+document.querySelector('form').addEventListener('submit', (event)=> {
+    console.log(event)
+    event.preventDefault();
+}, false);
 searchFormBtn.addEventListener('click', () => {
     const input = searchFormInput.value.trim();
     location.hash = `#search=${searchFormInput.value.trim()}`;
 });
 searchFormInput.addEventListener('keyup', (event) => {
-    console.log(event);
     if(event.key === 'Enter'){
         const input = searchFormInput.value.trim();
         location.hash = `#search=${searchFormInput.value.trim()}`;
@@ -23,6 +22,31 @@ arrowBtn.addEventListener('click', () => {
     history.back();
 });
 
+//Pagination
+
+nextBtn.addEventListener('click', () =>{
+    // location.hash: category=36-History?page=3
+    // ['category=36-History', 'page=3']
+    const [ hash, pageQuery] = location.hash.split('?');
+    
+    let page = pageQuery ? parseInt(pageQuery.split('=')[1]) : 1;
+
+    page += 1;
+    location.hash = `${hash}?page=${page}`;
+});
+
+priorBtn.addEventListener('click', () => {
+    // location.hash: category=36-History?page=3
+    // ['category=36-History', 'page=3']
+    const [ hash, pageQuery] = location.hash.split('?');
+    // pageQuery.split('=') --> ['page', '3']
+    let page = pageQuery ? parseInt(pageQuery.split('=')[1]) : undefined;
+
+    if(page > 1) {
+        page -= 1;
+        location.hash = `${hash}?page=${page}`;
+    } 
+});
 
 window.addEventListener('DOMContentLoaded', navigator, false);
 window.addEventListener('hashchange', navigator, false);
@@ -57,6 +81,7 @@ function homePage() {
     trendingPreviewSection.classList.remove('inactive');
     categoriesPreviewSection.classList.remove('inactive');
     genericListSection.classList.add('inactive');
+    buttonPanelSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
 
     //Loading skeletons
@@ -86,6 +111,7 @@ function trendsPage() {
     trendingPreviewSection.classList.add('inactive');
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
+    buttonPanelSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
 
     headerCategoryTitle.innerHTML = 'Tendencias';
@@ -111,6 +137,7 @@ function searchPage() {
     trendingPreviewSection.classList.add('inactive');
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
+    buttonPanelSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
 
@@ -138,14 +165,33 @@ function categoryPage() {
     trendingPreviewSection.classList.add('inactive');
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.remove('inactive');
+    buttonPanelSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
-    let url = location.hash.split('=');
-    let [id, categoryName] = url[1].split('-');
+    // location.hash: category=36-History?page=1
+    // ['category=36-History', 'page=1']
+    const [ hash, pageQuery] = location.hash.split('?');
+    // ['page', '1']
+    let page;
+    if (pageQuery) {
+        [ , page] = pageQuery.split('=');
+    }
+    page = pageQuery ? parseInt(page) : 1;
+
+    // ['category', '36-History']
+    const [ , categoryValue] = hash.split('=');
+
+    // ['36', 'History']
+    let [id, categoryName] = categoryValue.split('-');
     
-    console.log(categoryName);
-    categoryName = categoryName.replace('%20', ' ')
-    console.log(categoryName);
+    // console.table({
+    //     hash,
+    //     pageQuery,
+    //     page,
+    //     categoryValue
+    // })
+    categoryName = categoryName.replace('%20', ' ');
+  
 
     headerCategoryTitle.innerText = categoryName;
 
@@ -153,7 +199,8 @@ function categoryPage() {
         container: genericListSection,
         numOfSkeletons: 4});
 
-    getMoviesByCategories(id);
+    getMoviesByCategories({id, page});
+    
 }
 
 function movieDetailsPage() {
@@ -170,6 +217,7 @@ function movieDetailsPage() {
     trendingPreviewSection.classList.add('inactive');
     categoriesPreviewSection.classList.add('inactive');
     genericListSection.classList.add('inactive');
+    buttonPanelSection.classList.add('inactive');
     movieDetailSection.classList.remove('inactive');
 
     // ['#search', valor]

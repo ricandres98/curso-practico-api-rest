@@ -14,14 +14,15 @@ const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
 
 // Utils
 
+
 const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if(entry.isIntersecting) {
-            console.log(entry)
+            // console.log(entry);
             const url = entry.target.getAttribute('data-img');
             entry.target.setAttribute('src', url);
         }
-        
+
     });
 });
 
@@ -47,12 +48,12 @@ function printMovieCards(movies, fatherContainer, lazyLoad = false) {
             movieImg.src = `http://placehold.jp/20/5C218A/EEEAF2/150x225.jpg?text=${movie.title}`;
         })
 
-        
+
         if(lazyLoad) {
             lazyLoader.observe(movieImg);
         }
-        
-        
+
+
         movieContainer.appendChild(movieImg);
         fatherContainer.appendChild(movieContainer);
     });
@@ -72,11 +73,12 @@ function printCategories(categories, container){
         categoryTitle.addEventListener('click', () => {
             location.hash = `#category=${category.id}-${category.name}`
         })
-        
+
         categoryContainer.appendChild(categoryTitle);
         container.appendChild(categoryContainer);
     });
 }
+
 // Llamados a la API
 
 async function getTrendingMoviesPreview() {
@@ -90,17 +92,18 @@ async function getTrendingMoviesPreview() {
 
 async function getCategoriesPreview() {
     const { data } = await api(`/genre/movie/list`);
-    
+
     const categories = data.genres;
     console.log(categories);
 
     printCategories(categories, categoriesPreviewList);
 }
 
-async function getMoviesByCategories(id) {
+async function getMoviesByCategories({id, page = 1}) {
     const { data } = await api(`/discover/movie`, {
         params: {
             'with_genres': id,
+            'page': page,
         },
     });
 
@@ -140,7 +143,7 @@ async function getMovieById(id) {
     movieDetailTitle.innerHTML = movie.title;
     movieDetailDescription.innerHTML = movie.overview;
     movieDetailScore.innerHTML = movie.vote_average;
-    
+
     printCategories(movie.genres, movieDetailCategoriesList);
     getRelatedMoviesById(id);
 }
@@ -157,7 +160,7 @@ async function getRelatedMoviesById(id) {
 
 function buildMovieCardSkeletons({container, numOfSkeletons}) {
     container.innerHTML = "";
-    
+
     const fragment = new DocumentFragment();
 
     for(let i = 0; i < numOfSkeletons; i++) {
