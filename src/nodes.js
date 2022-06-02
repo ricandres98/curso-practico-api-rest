@@ -24,6 +24,8 @@ const trendingBtn = document.querySelector('.trendingPreview-btn');
 
 const priorBtn = document.querySelector('.buttonPanel-container .button--priorPage');
 const nextBtn = document.querySelector('.buttonPanel-container .button--nextPage');
+const currentPageSpan = document.querySelector('.page-info__current-page');
+const totalPagesSpan = document.querySelector('.page-info__total-pages');
 
 const movieDetailTitle = document.querySelector('.movieDetail-title');
 const movieDetailDescription = document.querySelector('.movieDetail-description');

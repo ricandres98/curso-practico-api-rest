@@ -25,6 +25,10 @@ arrowBtn.addEventListener('click', () => {
 //Pagination
 
 nextBtn.addEventListener('click', () =>{
+    
+    // if(hash.startsWith('#category=') {
+
+    // }
     // location.hash: category=36-History?page=3
     // ['category=36-History', 'page=3']
     const [ hash, pageQuery] = location.hash.split('?');
@@ -32,6 +36,7 @@ nextBtn.addEventListener('click', () =>{
     let page = pageQuery ? parseInt(pageQuery.split('=')[1]) : 1;
 
     page += 1;
+
     location.hash = `${hash}?page=${page}`;
 });
 
@@ -142,13 +147,15 @@ function searchPage() {
 
 
     // ['#search', 'valor']
-    let [ , query]= location.hash.split('=');
+    // let [ , query]= location.hash.split('=');
+
+    let { page, query } = readURL();
 
     buildMovieCardSkeletons({
         container: genericListSection,
         numOfSkeletons: 4});
 
-    getMoviesBySearch(query);
+    getMoviesBySearch({query, page});
 }
 
 function categoryPage() {
@@ -168,31 +175,17 @@ function categoryPage() {
     buttonPanelSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
-    // location.hash: category=36-History?page=1
-    // ['category=36-History', 'page=1']
-    const [ hash, pageQuery] = location.hash.split('?');
-    // ['page', '1']
-    let page;
-    if (pageQuery) {
-        [ , page] = pageQuery.split('=');
-    }
-    page = pageQuery ? parseInt(page) : 1;
+
+    const {hash, page} = readURL();
 
     // ['category', '36-History']
     const [ , categoryValue] = hash.split('=');
 
     // ['36', 'History']
     let [id, categoryName] = categoryValue.split('-');
-    
-    // console.table({
-    //     hash,
-    //     pageQuery,
-    //     page,
-    //     categoryValue
-    // })
+
     categoryName = categoryName.replace('%20', ' ');
   
-
     headerCategoryTitle.innerText = categoryName;
 
     buildMovieCardSkeletons({
@@ -200,7 +193,6 @@ function categoryPage() {
         numOfSkeletons: 4});
 
     getMoviesByCategories({id, page});
-    
 }
 
 function movieDetailsPage() {

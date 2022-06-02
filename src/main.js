@@ -14,6 +14,42 @@ const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
 
 // Utils
 
+const readURL = () => {
+    const params = {};
+
+    // location.hash: category=36-History?page=1&valor2=num2&valor3=num3
+    // ['category=36-History', 'page=1&valor2=num2&valor3=num3']
+    const [ hash, queryParams] = location.hash.split('?');
+    let [ , query ] = hash.split('='); // ['category', '36-History']
+    query = query.replaceAll('%20', ' ');
+    // ['page=1', 'valor2=num2', 'valor3=num3']
+    const queryParamsArray = queryParams ? queryParams.split('&') : [];
+    
+    queryParamsArray.forEach((param) => {
+        const [ paramName, paramValue ] = param.split('=');
+        params[paramName] = paramValue;
+    });
+    // params: {
+    //     page: 2,
+    //     valor2: algo,
+    //     valor3: algo,
+    // }
+
+    let { page } = params;
+    page = page ? parseInt(page) : 1;
+
+    return {
+        hash,
+        page,
+        params,
+        query,
+    };
+}
+
+function printPageInfo(currentPage, totalPages) {
+    currentPageSpan.innerHTML = currentPage;
+    totalPagesSpan.innerHTML = totalPages;
+}
 
 const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -108,20 +144,23 @@ async function getMoviesByCategories({id, page = 1}) {
     });
 
     const movies = data.results;
-
+    printPageInfo(page, data.total_pages);
     printMovieCards(movies, genericListSection, true);
 }
 
-async function getMoviesBySearch(query) {
+async function getMoviesBySearch({query, page}) {
+    console.table({query, page});
     const { data } = await api(`/search/movie`, {
         params: {
             query,
+            page,
         },
     });
     console.log(data)
 
     const movies = data.results;
-
+    
+    printPageInfo(page, data.total_pages);
     printMovieCards(movies, genericListSection, true);
 }
 
