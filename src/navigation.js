@@ -24,28 +24,26 @@ arrowBtn.addEventListener('click', () => {
 
 //Pagination
 
-nextBtn.addEventListener('click', () =>{
-    
-    // if(hash.startsWith('#category=') {
-
-    // }
+nextBtn.addEventListener('click', () => {
     // location.hash: category=36-History?page=3
     // ['category=36-History', 'page=3']
     const [ hash, pageQuery] = location.hash.split('?');
     
-    let page = pageQuery ? parseInt(pageQuery.split('=')[1]) : 1;
+    let { page } = pageQuery ? readURL() : { page: 1 };
+    
+    if(page < parseInt(totalPagesSpan.innerText)) {
+        page += 1; 
+        location.hash = `${hash}?page=${page}`;
+    }
 
-    page += 1;
-
-    location.hash = `${hash}?page=${page}`;
 });
 
 priorBtn.addEventListener('click', () => {
     // location.hash: category=36-History?page=3
     // ['category=36-History', 'page=3']
     const [ hash, pageQuery] = location.hash.split('?');
-    // pageQuery.split('=') --> ['page', '3']
-    let page = pageQuery ? parseInt(pageQuery.split('=')[1]) : undefined;
+    
+    let { page } = pageQuery ? readURL() : { page: undefined };
 
     if(page > 1) {
         page -= 1;

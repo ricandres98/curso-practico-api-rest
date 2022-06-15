@@ -208,6 +208,23 @@ button {
   border-bottom-right-radius: 8px;
 }
 
+/* Button panel */
+.buttonPanel-container {
+  max-width: 220px;
+  margin: 0 auto;
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttonPanel-container button {
+  background-color: unset;
+  color: var(--purple-dark-2);
+  font-weight: bold;
+  font-size: 18px;
+  font-family: var(--font-family-text);
+}
 
 /* Trending */
 .trendingPreview-header {
