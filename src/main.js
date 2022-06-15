@@ -17,7 +17,6 @@ const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
 const lazyLoader = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
         if(entry.isIntersecting) {
-            console.log(entry)
             const url = entry.target.getAttribute('data-img');
             entry.target.setAttribute('src', url);
         }
@@ -25,8 +24,17 @@ const lazyLoader = new IntersectionObserver((entries) => {
     });
 });
 
-function printMovieCards(movies, fatherContainer, lazyLoad = false) {
-    fatherContainer.innerHTML = '';
+function printMovieCards(
+    movies,
+    fatherContainer,
+    {
+        lazyLoad = false, 
+        clean = true
+    } = {},
+) {
+    if(clean) {
+        fatherContainer.innerHTML = '';
+    }
 
     movies.forEach(movie => {
         const movieContainer = document.createElement('div')
@@ -85,7 +93,7 @@ async function getTrendingMoviesPreview() {
     const movies = data.results;
     console.log(movies)
 
-    printMovieCards(movies, trendingMoviesPreviewList, true);
+    printMovieCards(movies, trendingMoviesPreviewList, {lazyLoad: true});
 }
 
 async function getCategoriesPreview() {
@@ -106,7 +114,7 @@ async function getMoviesByCategories(id) {
 
     const movies = data.results;
 
-    printMovieCards(movies, genericListSection, true);
+    printMovieCards(movies, genericListSection, {lazyLoad: true});
 }
 
 async function getMoviesBySearch(query) {
@@ -129,6 +137,42 @@ async function getTrendingMovies() {
     console.log(movies)
 
     printMovieCards(movies, genericListSection, true);
+}
+
+async function getPaginatedTrendingMovies() {
+    const {
+        scrollTop,
+        scrollHeight,
+        clientHeight
+    } = document.documentElement;
+    
+    const scrollIsBottom = (scrollTop + clientHeight >= scrollHeight - 10);
+    
+    if(scrollIsBottom) {
+        page++;
+        const { data } = await api('/trending/movie/day', {
+            params: {
+                page,
+            },
+        });
+    
+        const movies = data.results;
+        console.log(movies)
+    
+        printMovieCards(
+            movies, 
+            genericListSection, 
+            { lazyLoad: true, clean: false }
+        );    
+    }
+
+    // const btnLoadMore = document.createElement('button');
+    // btnLoadMore.innerText = 'Cargas más';
+    // btnLoadMore.addEventListener('click', () => {
+    //     getPaginatedTrendingMovies();
+    //     btnLoadMore.remove();
+    // });
+    // genericListSection.appendChild(btnLoadMore);
 }
 
 async function getMovieById(id) {
