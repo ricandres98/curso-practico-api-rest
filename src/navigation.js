@@ -1,3 +1,4 @@
+let maxPage;
 let page = 1;
 let infiniteScroll;
 
@@ -12,7 +13,6 @@ searchFormBtn.addEventListener('click', () => {
     location.hash = `#search=${searchFormInput.value.trim()}`;
 });
 searchFormInput.addEventListener('keyup', (event) => {
-    console.log(event);
     if(event.key === 'Enter'){
         const input = searchFormInput.value.trim();
         location.hash = `#search=${searchFormInput.value.trim()}`;
@@ -38,6 +38,8 @@ function navigator() {
         infiniteScroll = undefined;
     }
     
+    page = 1;
+
     if (location.hash.startsWith('#trends')) {
         trendsPage();
     } else if (location.hash.startsWith('#search='))  {
@@ -141,6 +143,8 @@ function searchPage() {
         numOfSkeletons: 4});
 
     getMoviesBySearch(query);
+
+    infiniteScroll = getPaginatedMoviesBySearch(query)
 }
 
 function categoryPage() {
@@ -173,6 +177,8 @@ function categoryPage() {
         numOfSkeletons: 4});
 
     getMoviesByCategories(id);
+
+    infiniteScroll = getPaginatedMoviesByCategories(id);
 }
 
 function movieDetailsPage() {
