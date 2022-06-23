@@ -1,3 +1,4 @@
+// Data
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     headers: {
@@ -11,6 +12,39 @@ const api = axios.create({
 const API_BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_URL_300 = 'https://image.tmdb.org/t/p/w300';
 const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
+
+function likedMoviesList() {
+    const item = JSON.parse(localStorage.getItem('liked_movies'));
+    let movies;
+
+    if(item) {
+        movies = item;
+    } else {
+        movies = {};
+    }
+
+    return movies;
+}
+
+function likeMovie(movie) {
+    //movie.id
+    const likedMovies = likedMoviesList();
+    console.log(likedMoviesList())
+
+    if (likedMovies[movie.id]) {
+        console.log('ya está, borrala');
+        likedMovies[movie.id] = undefined;
+        // localStorage.removeItem('liked_movies', JSON.stringify(likedMovies));
+        //removerla de ahí
+    } else {
+        console.log('no está, agregala');
+        likedMovies[movie.id] = movie;
+        // localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
+        //agregarla
+    }
+
+    localStorage.setItem('liked_movies', JSON.stringify(likedMovies))
+}
 
 // Utils
 
@@ -55,6 +89,14 @@ function printMovieCards(
             movieImg.src = `http://placehold.jp/20/5C218A/EEEAF2/150x225.jpg?text=${movie.title}`;
         })
 
+        const movieBtn = document.createElement('btn');
+        movieBtn.classList.add('movie-btn');
+        // movieBtn.innerText = '❤';
+        movieBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            movieBtn.classList.toggle('movie-btn--liked');
+            likeMovie(movie);
+        });
         
         if(lazyLoad) {
             lazyLoader.observe(movieImg);
@@ -62,6 +104,7 @@ function printMovieCards(
         
         
         movieContainer.appendChild(movieImg);
+        movieContainer.appendChild(movieBtn);
         fatherContainer.appendChild(movieContainer);
     });
 }
