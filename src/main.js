@@ -1,4 +1,13 @@
 // Data
+
+let language = localStorage.getItem('language') || navigator.language;
+
+languageSelector.addEventListener('change', () => {
+    localStorage.setItem('language', languageSelector.value);
+    language = languageSelector.value;
+    window.location.reload()
+});
+
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
     headers: {
@@ -6,6 +15,7 @@ const api = axios.create({
     },
     params: {
         'api_key': API_KEY,
+        'language': language
     }
 });
 
@@ -33,18 +43,17 @@ function likeMovie(movie) {
 
     if (likedMovies[movie.id]) {
         console.log('ya está, borrala');
-        likedMovies[movie.id] = undefined;
-        // localStorage.removeItem('liked_movies', JSON.stringify(likedMovies));
-        //removerla de ahí
+        delete likedMovies[movie.id];
     } else {
         console.log('no está, agregala');
         likedMovies[movie.id] = movie;
-        // localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
-        //agregarla
     }
 
-    localStorage.setItem('liked_movies', JSON.stringify(likedMovies))
+    localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
+    getLikedMovies();
+    getTrendingMoviesPreview();
 }
+
 
 // Utils
 
@@ -91,7 +100,12 @@ function printMovieCards(
 
         const movieBtn = document.createElement('btn');
         movieBtn.classList.add('movie-btn');
-        // movieBtn.innerText = '❤';
+
+        likedMoviesList()[movie.id]
+        ? movieBtn.classList.add('movie-btn--liked')
+        : movieBtn.classList.remove('movie-btn--liked');
+        
+
         movieBtn.addEventListener('click', (event) => {
             event.stopPropagation();
             movieBtn.classList.toggle('movie-btn--liked');
@@ -134,7 +148,6 @@ async function getTrendingMoviesPreview() {
     const { data } = await api('/trending/movie/day');
 
     const movies = data.results;
-    console.log(movies)
 
     printMovieCards(movies, trendingMoviesPreviewList, {lazyLoad: true});
 }
@@ -143,7 +156,6 @@ async function getCategoriesPreview() {
     const { data } = await api(`/genre/movie/list`);
     
     const categories = data.genres;
-    console.log(categories);
 
     printCategories(categories, categoriesPreviewList);
 }
@@ -307,6 +319,15 @@ async function getRelatedMoviesById(id) {
 
     printMovieCards(relatedMovies, relatedMoviesContainer, true);
     relatedMoviesContainer.scrollTo(0, 0);
+}
+
+function getLikedMovies() {
+    const likedMovies = likedMoviesList();
+    const moviesArray = Object.values(likedMovies);
+    
+    printMovieCards(moviesArray, likedMoviesPreviewList, {lazyLoad: true});
+
+    console.log(moviesArray);
 }
 
 // Build Loading skeletons

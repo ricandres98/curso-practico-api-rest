@@ -4,15 +4,18 @@ const trendingPreviewSection = document.querySelector('#trendingPreview');
 const categoriesPreviewSection = document.querySelector('#categoriesPreview');
 const genericListSection = document.querySelector('#genericList');
 const movieDetailSection = document.querySelector('#movieDetail');
+const likedMoviesSection = document.querySelector('#liked');
 
 //Lists & Containers 
 const searchForm = document.querySelector('#searchForm');
 const trendingMoviesPreviewList = document.querySelector('.trendingPreview-movieList');
+const likedMoviesPreviewList = document.querySelector('.liked-movieList');
 const categoriesPreviewList = document.querySelector('.categoriesPreview-list');
 const relatedMoviesContainer = document.querySelector('.relatedMovies-scrollContainer');
 
 //Elements
 const headerTitle = document.querySelector('.header-title');
+const languageSelector = document.querySelector('#languageInput');
 const arrowBtn = document.querySelector('.header-arrow');
 const headerCategoryTitle = document.querySelector('.header-title--categoryView');
 
