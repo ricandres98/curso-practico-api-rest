@@ -1,12 +1,16 @@
 // Data
 
-let language = localStorage.getItem('language') || navigator.language;
+// let language = localStorage.getItem('language') || navigator.language;
+// const [ languageCode, /**/ ] = language.split('-');
 
-languageSelector.addEventListener('change', () => {
-    localStorage.setItem('language', languageSelector.value);
-    language = languageSelector.value;
-    window.location.reload()
-});
+// const [selectedLanguageOption] = languageOptions.filter(option => option.value.startsWith(languageCode));
+// selectedLanguageOption.selected = true;
+
+// languageSelector.addEventListener('change', () => {
+//     localStorage.setItem('language', languageSelector.value);
+//     language = languageSelector.value;
+//     window.location.reload()
+// });
 
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
@@ -50,6 +54,7 @@ function likeMovie(movie) {
     }
 
     localStorage.setItem('liked_movies', JSON.stringify(likedMovies));
+
     getLikedMovies();
     getTrendingMoviesPreview();
 }
@@ -66,6 +71,38 @@ const lazyLoader = new IntersectionObserver((entries) => {
         
     });
 });
+
+const readURL = () => {
+    const params = {};
+
+    // location.hash: category=36-History?page=1&valor2=num2&valor3=num3
+    // ['category=36-History', 'page=1&valor2=num2&valor3=num3']
+    const [ hash, queryParams] = location.hash.split('?');
+    let [ , query ] = hash.split('='); // ['category', '36-History']
+    query = query.replaceAll('%20', ' ');
+    // ['page=1', 'valor2=num2', 'valor3=num3']
+    const queryParamsArray = queryParams ? queryParams.split('&') : [];
+    
+    queryParamsArray.forEach((param) => {
+        const [ paramName, paramValue ] = param.split('=');
+        params[paramName] = paramValue;
+    });
+    // params: {
+    //     page: 2,
+    //     valor2: algo,
+    //     valor3: algo,
+    // }
+
+    let { page } = params;
+    page = page ? parseInt(page) : 1;
+
+    return {
+        hash,
+        page,
+        params,
+        query,
+    };
+}
 
 function printMovieCards(
     movies,
@@ -324,8 +361,12 @@ async function getRelatedMoviesById(id) {
 function getLikedMovies() {
     const likedMovies = likedMoviesList();
     const moviesArray = Object.values(likedMovies);
-    
+
     printMovieCards(moviesArray, likedMoviesPreviewList, {lazyLoad: true});
+    
+    (likedMoviesPreviewList.innerHTML === '')
+    ? likedMoviesSection.classList.add('inactive') 
+    : likedMoviesSection.classList.remove('inactive');
 
     console.log(moviesArray);
 }

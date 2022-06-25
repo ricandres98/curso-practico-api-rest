@@ -17,18 +17,19 @@
     <span class="header-arrow inactive">&lt;</span>
     <h1 class="header-title ">PlatziMovies</h1>
     
-    <form action="">
+    <form action="" id="languageForm" class="header-languageForm">
+      <label for="languageInput">Language: </label>
       <select name="language" id="languageInput">
         <option value=""></option>
-        <option value="es">Español</option>
-        <option value="en">English</option>
+        <option value="es">Es</option>
+        <option value="en">En</option>
       </select>
     </form>
 
     <h1 class="header-title header-title--categoryView inactive">Acción</h1>
 
     <form method="" id="searchForm" class="header-searchForm">
-      <input type="text" placeholder="Vengadores" />
+      <input type="search" placeholder="Vengadores" />
       <button type="button">🔍</button>
     </form>
   </header>
@@ -165,6 +166,7 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="./src/secrets.js"></script>
   <script src="./src/nodes.js"></script>
+  <script src="./src/languages.js"></script>
   <script src="./src/main.js"></script>
   <script src="./src/navigation.js"></script>
 </body>

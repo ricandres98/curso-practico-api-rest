@@ -3,7 +3,7 @@ let page = 1;
 let infiniteScroll;
 
 // document.addEventListener('DOMContentLoaded', ()=>{
-    document.querySelector('form').addEventListener('submit', (event)=> {
+    document.querySelector('form#searchForm').addEventListener('submit', (event)=> {
         console.log(event)
         event.preventDefault();
     }, false);
@@ -78,6 +78,7 @@ function homePage() {
     categoriesPreviewSection.classList.remove('inactive');
     genericListSection.classList.add('inactive');
     movieDetailSection.classList.add('inactive');
+    
 
     //Loading skeletons
     buildMovieCardSkeletons({
@@ -91,6 +92,10 @@ function homePage() {
     getTrendingMoviesPreview();
     getCategoriesPreview();
     getLikedMovies();
+
+    (likedMoviesPreviewList.innerHTML === '')
+    ? likedMoviesSection.classList.add('inactive') 
+    : likedMoviesSection.classList.remove('inactive');
 }
 
 function trendsPage() {
@@ -140,7 +145,7 @@ function searchPage() {
 
 
     // ['#search', 'valor']
-    let [ , query]= location.hash.split('=');
+    let { query }= readURL();
 
     buildMovieCardSkeletons({
         container: genericListSection,
@@ -172,7 +177,7 @@ function categoryPage() {
     let [id, categoryName] = url[1].split('-');
     
     console.log(categoryName);
-    categoryName = categoryName.replace('%20', ' ')
+    categoryName = decodeURI(categoryName);
     console.log(categoryName);
 
     headerCategoryTitle.innerText = categoryName;

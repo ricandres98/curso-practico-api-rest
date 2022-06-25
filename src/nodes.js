@@ -16,8 +16,13 @@ const relatedMoviesContainer = document.querySelector('.relatedMovies-scrollCont
 //Elements
 const headerTitle = document.querySelector('.header-title');
 const languageSelector = document.querySelector('#languageInput');
+const languageOptions = [...document.querySelectorAll('option')];
 const arrowBtn = document.querySelector('.header-arrow');
 const headerCategoryTitle = document.querySelector('.header-title--categoryView');
+const trendingPreviewTitle = document.querySelector('h2.trendingPreview-title');
+const likedTitle = document.querySelector('h2.liked-title');
+const categoriesPreviewTitle = document.querySelector('h2.categoriesPreview-title');
+const relatedMoviesTitle = document.querySelector('h2.relatedMovies-title');
 
 const searchFormInput = document.querySelector('#searchForm input');
 const searchFormBtn = document.querySelector('#searchForm button');
