@@ -1,5 +1,44 @@
-let maxPage;
-let page = 1;
+import {
+    headerSection,
+    trendingPreviewSection,
+    categoriesPreviewSection,
+    genericListSection,
+    movieDetailSection,
+    likedMoviesSection,
+    searchForm,
+    trendingMoviesPreviewList,
+    likedMoviesPreviewList,
+    categoriesPreviewList,
+    relatedMoviesContainer,
+    headerTitle,
+    arrowBtn,
+    headerCategoryTitle,
+    searchFormInput,
+    searchFormBtn,
+    trendingBtn,
+    movieDetailCategoriesList 
+} from './nodes.js';
+
+import {
+    readURL,
+    getCategoriesPreview,
+    getTrendingMoviesPreview,
+    getLikedMovies,
+    getMoviesByCategories, 
+    getPaginatedMoviesByCategories, 
+    getMoviesBySearch, 
+    getPaginatedMoviesBySearch, 
+    getTrendingMovies, 
+    getPaginatedTrendingMovies, 
+    getMovieById, 
+    buildMovieCardSkeletons, 
+    buildCategorySkeletons, 
+    buildMovieDetailSkeletons 
+} from './main.js';
+
+
+export let prueba = 1;
+export let startPage = 1;
 let infiniteScroll;
 
 // document.addEventListener('DOMContentLoaded', ()=>{
@@ -38,7 +77,7 @@ function pageNavigator() {
         infiniteScroll = undefined;
     }
     
-    page = 1;
+    startPage = 1;
 
     if (location.hash.startsWith('#trends')) {
         trendsPage();
