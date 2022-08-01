@@ -1,16 +1,24 @@
+import axios from "axios";
+import { language } from "./languages";
+import { 
+    headerSection,
+    genericListSection,
+    likedMoviesSection,
+    trendingMoviesPreviewList,
+    likedMoviesPreviewList,
+    categoriesPreviewList,
+    relatedMoviesContainer,
+    movieDetailTitle,
+    movieDetailDescription,
+    movieDetailScore,
+    movieDetailCategoriesList,
+} from "./nodes.js";
+
+import { startPage } from './navigation';
+
 // Data
 
-// let language = localStorage.getItem('language') || navigator.language;
-// const [ languageCode, /**/ ] = language.split('-');
-
-// const [selectedLanguageOption] = languageOptions.filter(option => option.value.startsWith(languageCode));
-// selectedLanguageOption.selected = true;
-
-// languageSelector.addEventListener('change', () => {
-//     localStorage.setItem('language', languageSelector.value);
-//     language = languageSelector.value;
-//     window.location.reload()
-// });
+const API_KEY = process.env.API_KEY;
 
 const api = axios.create({
     baseURL: 'https://api.themoviedb.org/3',
@@ -23,9 +31,11 @@ const api = axios.create({
     }
 });
 
-const API_BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_URL_300 = 'https://image.tmdb.org/t/p/w300';
 const IMAGE_URL_500 = 'https://image.tmdb.org/t/p/w500';
+
+let maxPage ;
+let page = startPage;
 
 function likedMoviesList() {
     const item = JSON.parse(localStorage.getItem('liked_movies'));
@@ -72,7 +82,7 @@ const lazyLoader = new IntersectionObserver((entries) => {
     });
 });
 
-const readURL = () => {
+export const readURL = () => {
     const params = {};
 
     // location.hash: category=36-History?page=1&valor2=num2&valor3=num3
@@ -104,7 +114,7 @@ const readURL = () => {
     };
 }
 
-function printMovieCards(
+export function printMovieCards(
     movies,
     fatherContainer,
     {
@@ -160,7 +170,7 @@ function printMovieCards(
     });
 }
 
-function printCategories(categories, container){
+export function printCategories(categories, container){
     container.innerHTML = '';
 
     categories.forEach(category => {
@@ -181,7 +191,7 @@ function printCategories(categories, container){
 }
 // Llamados a la API
 
-async function getTrendingMoviesPreview() {
+export async function getTrendingMoviesPreview() {
     const { data } = await api('/trending/movie/day');
 
     const movies = data.results;
@@ -189,7 +199,7 @@ async function getTrendingMoviesPreview() {
     printMovieCards(movies, trendingMoviesPreviewList, {lazyLoad: true});
 }
 
-async function getCategoriesPreview() {
+export async function getCategoriesPreview() {
     const { data } = await api(`/genre/movie/list`);
     
     const categories = data.genres;
@@ -197,7 +207,7 @@ async function getCategoriesPreview() {
     printCategories(categories, categoriesPreviewList);
 }
 
-async function getMoviesByCategories(id) {
+export async function getMoviesByCategories(id) {
     const { data } = await api(`/discover/movie`, {
         params: {
             'with_genres': id,
@@ -210,7 +220,7 @@ async function getMoviesByCategories(id) {
     printMovieCards(movies, genericListSection, {lazyLoad: true});
 }
 
-function getPaginatedMoviesByCategories(id) {
+export function getPaginatedMoviesByCategories(id) {
     return async function() {
         const {
             scrollTop,
@@ -246,7 +256,7 @@ function getPaginatedMoviesByCategories(id) {
     }
 }
 
-async function getMoviesBySearch(query) {
+export async function getMoviesBySearch(query) {
     const { data } = await api(`/search/movie`, {
         params: {
             query,
@@ -260,7 +270,7 @@ async function getMoviesBySearch(query) {
     printMovieCards(movies, genericListSection, true);
 }
 
-function getPaginatedMoviesBySearch(query) {
+export function getPaginatedMoviesBySearch(query) {
     
     return async function() {
         const {
@@ -295,7 +305,7 @@ function getPaginatedMoviesBySearch(query) {
     }
 }
 
-async function getTrendingMovies() {
+export async function getTrendingMovies() {
     const { data } = await api('/trending/movie/day');
 
     const movies = data.results;
@@ -305,7 +315,7 @@ async function getTrendingMovies() {
     printMovieCards(movies, genericListSection, true);
 }
 
-async function getPaginatedTrendingMovies() {
+export async function getPaginatedTrendingMovies() {
     const {
         scrollTop,
         scrollHeight,
@@ -336,7 +346,7 @@ async function getPaginatedTrendingMovies() {
     }
 }
 
-async function getMovieById(id) {
+export async function getMovieById(id) {
     const { data: movie } = await api(`/movie/${id}`);
 
     headerSection.style.background = `linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), url(${IMAGE_URL_500}${movie.poster_path})`
@@ -350,7 +360,7 @@ async function getMovieById(id) {
     getRelatedMoviesById(id);
 }
 
-async function getRelatedMoviesById(id) {
+export async function getRelatedMoviesById(id) {
     const { data } = await api(`/movie/${id}/similar`);
     const relatedMovies = data.results;
 
@@ -358,7 +368,7 @@ async function getRelatedMoviesById(id) {
     relatedMoviesContainer.scrollTo(0, 0);
 }
 
-function getLikedMovies() {
+export function getLikedMovies() {
     const likedMovies = likedMoviesList();
     const moviesArray = Object.values(likedMovies);
 
@@ -373,7 +383,7 @@ function getLikedMovies() {
 
 // Build Loading skeletons
 
-function buildMovieCardSkeletons({container, numOfSkeletons}) {
+export function buildMovieCardSkeletons({container, numOfSkeletons}) {
     container.innerHTML = "";
     
     const fragment = new DocumentFragment();
@@ -389,7 +399,7 @@ function buildMovieCardSkeletons({container, numOfSkeletons}) {
     container.appendChild(fragment);
 }
 
-function buildCategorySkeletons({container, numOfSkeletons}) {
+export function buildCategorySkeletons({container, numOfSkeletons}) {
     container.innerHTML = "";
 
     const fragment = new DocumentFragment();
@@ -405,10 +415,23 @@ function buildCategorySkeletons({container, numOfSkeletons}) {
     container.appendChild(fragment);
 }
 
-function buildMovieDetailSkeletons(){
+export function buildMovieDetailSkeletons(){
     movieDetailTitle.innerHTML = '<span class="loading"></span>';
     movieDetailDescription.innerHTML = `<span class="loading"></span>
     <span class="loading"></span>
     <span class="loading"></span>`;
     movieDetailScore.innerHTML = '<span class="loading"></span>';
 }
+
+// import { readURL } from './main.js';
+// import { getCategoriesPreview } from './main.js';
+// import { getMoviesByCategories } from './main.js';
+// import { getPaginatedMoviesByCategories } from './main.js';
+// import { getMoviesBySearch } from './main.js';
+// import { getPaginatedMoviesBySearch } from './main.js';
+// import { getTrendingMovies } from './main.js';
+// import { getPaginatedTrendingMovies } from './main.js';
+// import { getMovieById } from './main.js';
+// import { buildMovieCardSkeletons } from './main.js';
+// import { buildCategorySkeletons } from './main.js';
+// import { buildMovieDetailSkeletons } from './main.js';

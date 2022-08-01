@@ -1,3 +1,13 @@
+import { 
+    languageOptions, 
+    languageSelector,
+    trendingPreviewTitle,
+    trendingBtn,
+    likedTitle,
+    categoriesPreviewTitle,
+    relatedMoviesTitle,
+} from './nodes.js'
+
 class Language {
     constructor(
         language,
@@ -43,7 +53,7 @@ languagesArray.push(new Language('en', {
     relatedMoviesTitle: 'Related movies',
 }));
 
-let language = localStorage.getItem('language') || navigator.language;
+export let language = localStorage.getItem('language') || navigator.language;
 const [ languageCode, /**/ ] = language.split('-');
 
 const [selectedLanguageOption] = languageOptions.filter(option => option.value.startsWith(languageCode));
