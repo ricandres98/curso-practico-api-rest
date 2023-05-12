@@ -12,6 +12,7 @@ import {
     movieDetailDescription,
     movieDetailScore,
     movieDetailCategoriesList,
+    movieDetailImage,
 } from "./nodes.js";
 
 import { startPage } from './navigation';
@@ -349,7 +350,9 @@ export async function getPaginatedTrendingMovies() {
 export async function getMovieById(id) {
     const { data: movie } = await api(`/movie/${id}`);
 
-    headerSection.style.background = `linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), url(${IMAGE_URL_500}${movie.poster_path})`
+    headerSection.style.background = `linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), top/cover url(${IMAGE_URL_500}${movie.poster_path})`;
+    movieDetailImage.src = `${IMAGE_URL_500}${movie.poster_path}`;
+    movieDetailImage.alt = `${movie.title} poster`;
 
     console.log(movie);
     movieDetailTitle.innerHTML = movie.title;

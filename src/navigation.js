@@ -16,7 +16,8 @@ import {
     searchFormInput,
     searchFormBtn,
     trendingBtn,
-    movieDetailCategoriesList 
+    movieDetailCategoriesList,
+    movieDetailImage
 } from './nodes.js';
 
 import {
@@ -235,6 +236,7 @@ function movieDetailsPage() {
 
     headerSection.classList.add('header-container--long');
     headerSection.style.background = '';
+    movieDetailImage.src = '';
     arrowBtn.classList.remove('inactive');
     arrowBtn.classList.add('header-arrow--white');
     headerCategoryTitle.classList.add('inactive');
