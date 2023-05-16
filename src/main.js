@@ -13,6 +13,7 @@ import {
     movieDetailScore,
     movieDetailCategoriesList,
     movieDetailImage,
+    movieDetailImageContainer,
 } from "./nodes.js";
 
 import { startPage } from './navigation';
@@ -351,13 +352,19 @@ export async function getMovieById(id) {
     const { data: movie } = await api(`/movie/${id}`);
 
     headerSection.style.background = `linear-gradient(180deg, rgba(0, 0, 0, 0.35) 19.27%, rgba(0, 0, 0, 0) 29.17%), top/cover url(${IMAGE_URL_500}${movie.poster_path})`;
-    movieDetailImage.src = `${IMAGE_URL_500}${movie.poster_path}`;
-    movieDetailImage.alt = `${movie.title} poster`;
+    // movieDetailImage.src = `${IMAGE_URL_500}${movie.poster_path}`;
+    // movieDetailImage.alt = `${movie.title} poster`;
 
     console.log(movie);
     movieDetailTitle.innerHTML = movie.title;
     movieDetailDescription.innerHTML = movie.overview;
     movieDetailScore.innerHTML = movie.vote_average;
+    movieDetailImageContainer.innerHTML  = `
+        <img 
+            src="${IMAGE_URL_500}${movie.poster_path}" 
+            alt="${movie.title} poster"
+        />
+    `;
     
     printCategories(movie.genres, movieDetailCategoriesList);
     getRelatedMoviesById(id);
@@ -424,6 +431,7 @@ export function buildMovieDetailSkeletons(){
     <span class="loading"></span>
     <span class="loading"></span>`;
     movieDetailScore.innerHTML = '<span class="loading"></span>';
+    movieDetailImageContainer.innerHTML = '<span class="loading movie-image-loading"></span>';
 }
 
 // import { readURL } from './main.js';

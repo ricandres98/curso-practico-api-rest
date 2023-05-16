@@ -33,7 +33,11 @@ export const movieDetailTitle = document.querySelector('.movieDetail-title');
 export const movieDetailDescription = document.querySelector('.movieDetail-description');
 export const movieDetailScore = document.querySelector('.movieDetail-score');
 export const movieDetailCategoriesList = document.querySelector('.movieDetail-container .categories-list');
+export const movieDetailImageContainer = document.querySelector('.movieDetail-image');
 export const movieDetailImage = document.querySelector('.movieDetail-image img');
+
+export const footerDoneByParagraph = document.querySelector('footer p.footer__done-by');
+export const footerApiCreditsParagraph = document.querySelector('footer p.footer__api-credits');
 
 // import { headerSection } from './nodes.js';
 // import { trendingPreviewSection } from './nodes.js';

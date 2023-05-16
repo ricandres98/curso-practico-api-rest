@@ -155,7 +155,9 @@ function trendsPage() {
     genericListSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
 
-    headerCategoryTitle.innerHTML = 'Tendencias';
+    const language = localStorage.getItem('language');
+
+    headerCategoryTitle.innerHTML = language === 'es' ? 'Tendencias' : 'Trends';
 
     buildMovieCardSkeletons({
         container: genericListSection,
@@ -236,7 +238,7 @@ function movieDetailsPage() {
 
     headerSection.classList.add('header-container--long');
     headerSection.style.background = '';
-    movieDetailImage.src = '';
+    // movieDetailImage.src = '';
     arrowBtn.classList.remove('inactive');
     arrowBtn.classList.add('header-arrow--white');
     headerCategoryTitle.classList.add('inactive');
